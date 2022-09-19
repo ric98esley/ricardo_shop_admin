@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useFetch from '@hooks/useFetch';
 import endPoints from '@services/api';
+import Pagination from '@common/pagination';
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+const PRODUCT_LIMIT=5;
+const PRODUCT_OFFSET=0
 
 export default function Dashboard() {
-  const products = useFetch(endPoints.products.getProductsPaginate());
+
+  const [offset, setOffSet] = useState(PRODUCT_OFFSET);
+
+  const totalProducts = useFetch(endPoints.products.getProducts).length;
+  const products = useFetch(endPoints.products.getProductsPaginate(PRODUCT_LIMIT, offset));
   console.log(products);
 
   return (
@@ -71,6 +77,7 @@ export default function Dashboard() {
                   ))}
                 </tbody>
               </table>
+              {totalProducts > 0 && <Pagination setOffSet={setOffSet} productLimit={PRODUCT_LIMIT} totalProducts={totalProducts}/>}
             </div>
           </div>
         </div>
