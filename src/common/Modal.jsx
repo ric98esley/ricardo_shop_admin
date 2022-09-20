@@ -1,7 +1,7 @@
 import React from 'react';
 import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { XCircleIcon } from '@heroicons/react/solid';
+import { XCircleIcon } from '@heroicons/react/20/solid';
 
 // eslint-disable-next-line react/prop-types
 export default function Modal({ open, setOpen, children }) {

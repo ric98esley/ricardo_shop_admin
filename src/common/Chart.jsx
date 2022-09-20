@@ -4,7 +4,7 @@ import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const Chart = ({ charrData }) => {
+const Chart = ({ chartData }) => {
   return (
     <>
       <Bar
@@ -18,7 +18,7 @@ const Chart = ({ charrData }) => {
           legend: {
             display: true,
             position: 'right',
-          }
+          },
         }}
       />
     </>

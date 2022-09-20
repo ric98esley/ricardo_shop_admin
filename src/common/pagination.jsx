@@ -91,12 +91,10 @@ const Pagination = ({ setOffSet, productLimit, totalProducts }) => {
     return range(1, totalPages);
   };
   const itemsPagination = fetchPageNumbers();
-  console.log(itemsPagination);
 
   const buttonChange = async (page) => {
     if (page <= pagination && page > 0) {
       const offset = (page - 1) * productLimit;
-      console.log(offset);
       setCurrent(page);
       await setOffSet(offset);
     }
