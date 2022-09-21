@@ -19,6 +19,7 @@ const endPoints = {
   },
   products: {
     getProducts: `${API}/api/${VERSION}/products?`,
+    addProducts: `${API}/api/${VERSION}/products`,
     getProductsPaginate: (limit = 10, offset = 0) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}`,
     getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
     putProduct: (id) => `${API}/api/${VERSION}/products/${id}`,

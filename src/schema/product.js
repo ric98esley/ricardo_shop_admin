@@ -5,7 +5,7 @@ const productSchema = Yup.object().shape({
   price: Yup.number().required('Price is required.').max(100000, 'Price is to big.').typeError('Price is required'),
   description: Yup.string().min(6, 'Descrition is too short.').max(150, 'Description is too long.').required('Description required.'),
   categoryId: Yup.number().max(1, 'Category invalid.').required('Category is required.'),
-  images: Yup.array().of(Yup.string().typeError('image required').required('Image Required')),
+  images: Yup.array().of(Yup.string().required()).nullable(),
 }).required();
 
 export { productSchema };

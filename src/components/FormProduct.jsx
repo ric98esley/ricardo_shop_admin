@@ -1,7 +1,9 @@
 import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { productSchema } from 'schema/product';
+import { productSchema } from '@schema/product';
+import addProduct from '@services/api/products';
+
 
 export default function FormProduct() {
   const formRef = useRef(null);
@@ -11,7 +13,7 @@ export default function FormProduct() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(productSchema) });
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (form, event) => {
     event.preventDefault();
     const formData = new FormData(formRef.current);
     const data = {
@@ -22,19 +24,10 @@ export default function FormProduct() {
       images: [formData.get('images').name],
     };
 
-    // const valid = await productSchema.validate(data).catch(
-    //   function (error) {
-    //     let errorValidate = error.errors;
-    //     let errorMessage = '';
-    //     for (const [key, value] of Object.entries(errorValidate)){
-    //       console.log(value);
-    //       errorMessage = errorMessage.concat(value);
-    //     }
-    //     alert(errorMessage);
-    //   }
-    // )
-
     console.log(data);
+    addProduct(data).then((response) => {
+      console.log(response);
+    })
   };
 
   return (
