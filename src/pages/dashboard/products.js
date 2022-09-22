@@ -1,14 +1,56 @@
-import React, { useState, Fragment } from 'react';
-import { CheckIcon, PencilIcon } from '@heroicons/react/20/solid';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
+
+import endPoints from '@services/api';
 import Modal from '@common/Modal';
 import FormProduct from '@components/FormProduct';
+import useAlert from '@hooks/useAlert';
+import Alert from '@common/alert';
+import { deleteProduct } from '@services/api/products';
+
+import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
 
 const products = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const { alert, setAlert, toggleAlert } = useAlert();
+
+  useEffect(() => {
+    async function GetProducts() {
+      const response = await axios.get(endPoints.products.getProducts);
+      setProducts(response.data);
+    }
+    try {
+      GetProducts();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [alert]);
+
+  const handleDelete = (id) => {
+    deleteProduct(id)
+      .then(() => {
+        setAlert({
+          active: true,
+          message: 'Product Deleted',
+          type: 'succcess',
+          autoClose: true,
+        });
+      })
+      .catch((error) => {
+        setAlert({
+          active: true,
+          message: error.message,
+          type: 'error',
+          autoClose: false,
+        });
+      });
+  };
 
   return (
     <>
+      <Alert alert={alert} handleClose={toggleAlert} />
       <div className="lg:flex lg:items-center lg:justify-between">
         <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">List of Products</h2>
@@ -85,14 +127,14 @@ const products = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/edit" className="text-indigo-600 hover:text-indigo-900">
+                        <div  className="text-indigo-600 hover:text-indigo-900">
+                          <Link href={`edit/${product.id}`} >
                           Edit
-                        </a>
+                          </Link>
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/delete" className="text-indigo-600 hover:text-indigo-900">
-                          Delete
-                        </a>
+                        <TrashIcon className="flex-shrink-0 h-6 w-6 text-gray-400 cursor-pointer" aria-hidden="true" onClick={() => handleDelete(product.id)} />
                       </td>
                     </tr>
                   ))}
@@ -104,7 +146,7 @@ const products = () => {
         </div>
       </div>
       <Modal open={open} setOpen={setOpen}>
-        <FormProduct />
+        <FormProduct setOpen={setOpen} setAlert={setAlert} />
       </Modal>
     </>
   );

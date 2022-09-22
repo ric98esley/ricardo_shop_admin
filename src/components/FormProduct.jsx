@@ -1,12 +1,22 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import { productSchema } from '@schema/product';
-import addProduct from '@services/api/products';
+import { addProduct, editProduct } from '@services/api/products';
 
-
-export default function FormProduct() {
+export default function FormProduct({ setOpen, setAlert, product }) {
+  const router = useRouter();
   const formRef = useRef(null);
+  // change id on the tag
+  useEffect(() => {
+    const categoryTag = document.querySelector('#category');
+    categoryTag.value = product?.category?.id;
+  }, [product]);
+
+  //Verify Form
   const {
     register,
     handleSubmit,
@@ -23,11 +33,26 @@ export default function FormProduct() {
       categoryId: parseInt(formData.get('category')),
       images: [formData.get('images').name],
     };
-
-    console.log(data);
-    addProduct(data).then((response) => {
-      console.log(response);
-    })
+    if (product) {
+      editProduct(product.id, data).then((response) => {
+        router.push('/dashboard/products/')
+      })
+    } else {
+      addProduct(data)
+        .then((response) => {
+          console.log(response);
+          setAlert({
+            active: true,
+            message: 'Product added succesfully',
+            type: 'success',
+            autoClose: false,
+          });
+          setOpen(false);
+        })
+        .catch((error) => {
+          setAlert({ active: true, message: error.message, type: 'error', autoCLose: false });
+        });
+    }
   };
 
   return (
@@ -40,6 +65,7 @@ export default function FormProduct() {
                 Title
               </label>
               <input
+                defaultValue={product?.title}
                 {...register('title')}
                 type="text"
                 name="title"
@@ -53,6 +79,7 @@ export default function FormProduct() {
                 Price
               </label>
               <input
+                defaultValue={product?.price}
                 {...register('price')}
                 type="number"
                 name="price"
@@ -66,6 +93,7 @@ export default function FormProduct() {
                 Category
               </label>
               <select
+                defaultValue={product?.category?.id}
                 {...register('categoryId')}
                 id="category"
                 name="category"
@@ -75,7 +103,7 @@ export default function FormProduct() {
                 <option value="1">Clothes</option>
                 <option value="2">Electronics</option>
                 <option value="3">Furniture</option>
-                <option value="4">Toys</option>
+                <option value="4">Shoes</option>
                 <option value="5">Others</option>
               </select>
               <p>{errors.category?.message}</p>
@@ -86,6 +114,7 @@ export default function FormProduct() {
                 Description
               </label>
               <textarea
+                defaultValue={product?.description}
                 {...register('description')}
                 name="description"
                 id="description"
@@ -114,7 +143,7 @@ export default function FormProduct() {
                         className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                       >
                         <span>Upload a file</span>
-                        <input {...register('images')} id="images" name="images" type="file" className="sr-only" />
+                        <input defaultValue={product?.images} {...register('images')} id="images" name="images" type="file" className="sr-only" />
                       </label>
                       <p className="pl-1">or drag and drop</p>
                     </div>
