@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import useFetch from '@hooks/useFetch';
 import endPoints from '@services/api';
-import Pagination from '@common/pagination';
 import Chart from '@common/Chart';
 
-const PRODUCT_LIMIT = 5;
-const PRODUCT_OFFSET = 0;
-
 export default function Dashboard() {
-  const [offset, setOffSet] = useState(PRODUCT_OFFSET);
 
   const totalProducts = useFetch(endPoints.products.getProducts).length;
-  const products = useFetch(endPoints.products.getProductsPaginate(PRODUCT_LIMIT, offset));
+  const products = useFetch(endPoints.products.getProducts);
 
   const categoryNames = products?.map((product) => product.category);
   const categoryCount = categoryNames?.map((category) => category.name);
@@ -32,7 +27,7 @@ export default function Dashboard() {
   return (
     <>
       <Chart className="mb-8 mt-2" chartData={data} />
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -97,7 +92,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

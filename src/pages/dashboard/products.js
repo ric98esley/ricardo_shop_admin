@@ -2,23 +2,30 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 
-import endPoints from '@services/api';
 import Modal from '@common/Modal';
-import FormProduct from '@components/FormProduct';
-import useAlert from '@hooks/useAlert';
 import Alert from '@common/alert';
+import Pagination from '@common/Pagination';
+import FormProduct from '@components/FormProduct';
+import useFetch from '@hooks/useFetch';
+import useAlert from '@hooks/useAlert';
+import endPoints from '@services/api';
 import { deleteProduct } from '@services/api/products';
 
 import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
+const PRODUCT_LIMIT = 5;
+const PRODUCT_OFFSET = 0;
 
 const products = () => {
+  const totalProducts = useFetch(endPoints.products.getProducts).length;
+  const [offset, setOffSet] = useState(PRODUCT_OFFSET);
+
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const { alert, setAlert, toggleAlert } = useAlert();
 
   useEffect(() => {
     async function GetProducts() {
-      const response = await axios.get(endPoints.products.getProducts);
+      const response = await axios.get(endPoints.products.getProductsPaginate(PRODUCT_LIMIT, offset));
       setProducts(response.data);
     }
     try {
@@ -26,7 +33,7 @@ const products = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [alert]);
+  }, [alert, offset]);
 
   const handleDelete = (id) => {
     deleteProduct(id)
@@ -140,7 +147,7 @@ const products = () => {
                   ))}
                 </tbody>
               </table>
-              {/* {totalProducts > 0 && <Pagination setOffSet={setOffSet} productLimit={PRODUCT_LIMIT} totalProducts={totalProducts} />} */}
+              {totalProducts > 0 && <Pagination setOffSet={setOffSet} productLimit={PRODUCT_LIMIT} totalProducts={totalProducts} />}
             </div>
           </div>
         </div>

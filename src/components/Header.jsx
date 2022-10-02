@@ -23,6 +23,7 @@ function classNames(...classes) {
 export default function Header() {
   const auth = useAuth();
 
+
   const userData = {
     name: auth?.user?.name,
     email: auth?.user?.email,
@@ -30,7 +31,7 @@ export default function Header() {
   };
   return (
     <>
-      <Disclosure as="nav" className="bg-gray-800">
+      <Disclosure as="nav" className={`bg-gray-800 ${(userData.name) ? "": "hidden"}`}>
         {({ open }) => (
           <>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,15 +83,9 @@ export default function Header() {
                         leaveTo="transform opacity-0 scale-95"
                       >
                         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          {userNavigation.map((item) => (
-                            <Menu.Item key={item.name}>
-                              {({ active }) => (
-                                <a href={item.href} className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
-                                  {item.name}
-                                </a>
-                              )}
-                            </Menu.Item>
-                          ))}
+                                <button onClick={() => auth.logout()} className={'bg-gray-100 block px-4 py-2 text-sm text-gray-700'}>
+                                  Logout
+                                </button>
                         </Menu.Items>
                       </Transition>
                     </Menu>
