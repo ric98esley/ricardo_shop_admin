@@ -1,149 +1,68 @@
-/* This example requires Tailwind CSS v2.0+ */
-import React, { Fragment } from 'react';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BellIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '@hooks/useAuth';
+import React, { useContext } from 'react';
+import Image from 'next/image';
+import useFetch from '@hooks/useFetch';
 
+import ShoppingCartContext from '@context/ShoppingCartContext';
+import Bar from '@icons/icon_menu.svg';
+import Cart from '@icons/icon_shopping_cart.svg';
+import Logo from '@logos/logo_yard_sale.svg';
+import endPoints from '@services/api';
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Productos', href: '/dashboard/products/', current: false },
-  { name: 'Ventas', href: '#', current: false },
-];
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
-
-export default function Header() {
-  const auth = useAuth();
-
-
-  const userData = {
-    name: auth?.user?.name,
-    email: auth?.user?.email,
-    imageUrl: auth?.user?.avatar,
+const Header = () => {
+  const products = useFetch(endPoints.products.getProducts);
+  const categoryNames = new Set(products?.map((product) => product.category.name));
+  const categories = Array.from(categoryNames);
+  const { state, toggleOrders, toggleMenu, toggleMenuMobile, changeToggle } = useContext(ShoppingCartContext);
+  const handleToggle = (toggle) => {
+    changeToggle(toggle);
   };
+
   return (
     <>
-      <Disclosure as="nav" className={`bg-gray-800 ${(userData.name) ? "": "hidden"}`}>
-        {({ open }) => (
-          <>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between h-16">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <img className="h-8 w-8" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow" />
-                  </div>
-                  <div className="hidden md:block">
-                    <div className="ml-10 flex items-baseline space-x-4">
-                      {navigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className={classNames(item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium')}
-                          aria-current={item.current ? 'page' : undefined}
-                        >
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div className="hidden md:block">
-                  <div className="ml-4 flex items-center md:ml-6">
-                    <button
-                      type="button"
-                      className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                    >
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
+      <nav className="flex justify-between py-0 px-6 border-b border-veryLightPink border-solid sticky top-0 z-20 bg-white">
+        <div className="block lg:hidden my-auto mx-0">
+          <Image onClick={() => handleToggle('menu-mobile')} src={Bar} alt="menu" />
+        </div>
 
-                    {/* Profile dropdown */}
-                    <Menu as="div" className="ml-3 relative">
-                      <div>
-                        <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                          <span className="sr-only">Open user menu</span>
-                          <img className="h-8 w-8 rounded-full" src={userData.imageUrl} alt="" />
-                        </Menu.Button>
-                      </div>
-                      <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-100"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                      >
-                        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <button onClick={() => auth.logout()} className={'bg-gray-100 block px-4 py-2 text-sm text-gray-700'}>
-                                  Logout
-                                </button>
-                        </Menu.Items>
-                      </Transition>
-                    </Menu>
-                  </div>
-                </div>
-                <div className="-mr-2 flex md:hidden">
-                  {/* Mobile menu button */}
-                  <Disclosure.Button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                    <span className="sr-only">Open main menu</span>
-                    {open ? <XMarkIcon className="block h-6 w-6" aria-hidden="true" /> : <Bars3Icon className="block h-6 w-6" aria-hidden="true" />}
-                  </Disclosure.Button>
-                </div>
-              </div>
-            </div>
+        <div className="flex">
+          <Image src={Logo} alt="logo" className="w-[100px]" />
 
-            <Disclosure.Panel className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {navigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className={classNames(item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium')}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-              <div className="pt-4 pb-3 border-t border-gray-700">
-                <div className="flex items-center px-5">
-                  <div className="flex-shrink-0">
-                    <img className="h-10 w-10 rounded-full" src={userData.imageUrl} alt="" />
-                  </div>
-                  <div className="ml-3">
-                    <div className="text-base font-medium leading-none text-white">{userData.name}</div>
-                    <div className="text-sm font-medium leading-none text-gray-400">{userData.email}</div>
-                  </div>
-                  <button
-                    type="button"
-                    className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
+          <ul className="hidden list-none p-0 ml-12 lg:flex lg:items-center h-16">
+            {categories.map((category) => {
+              console.log(category);
+              return (
+                <li>
+                  <a className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen" href="/">
+                    {category}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <div>
+          <ul className="list-none p-0 m-0 flex items-center h-16 space-x-4">
+            <li className="hidden lg:inline-block">
+              <button className="inline-block h-10 w-24 border border-solid border-hospitalGreen text-md font-semibold text-veryLightPink rounded-lg hover:scale-110">Login</button>
+            </li>
+            <li className="hidden lg:inline-block">
+              <button className="inline-block h-10 w-24 border border-solid bg-hospitalGreen text-md font-semibold text-white rounded-lg hover:scale-110">Sign up</button>
+            </li>
+            <li className="hidden text-veryLightPink text-sm mr-3">platzi@example.com</li>
+            <li className="relative cursor-pointer align-middle">
+              <Image src={Cart} alt="shopping cart" className="" />
+              {state.cart.length > 0 ? (
+                <div className="w-4 h-4 font-bold absolute top-[-6px] right-[-3px] text-sm flex justify-center items-center bg-hospitalGreen rounded-full">
+                  <p>{state.cart.length}</p>
                 </div>
-                <div className="mt-3 px-2 space-y-1">
-                  {userNavigation.map((item) => (
-                    <Disclosure.Button key={item.name} as="a" href={item.href} className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
-                      {item.name}
-                    </Disclosure.Button>
-                  ))}
-                </div>
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
+              ) : null}
+            </li>
+          </ul>
+        </div>
+      </nav>
     </>
   );
-}
+};
+
+export default Header;

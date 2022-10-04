@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors');
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   content: ['./src/**/*{html,js,jsx}'],
@@ -17,6 +18,7 @@ module.exports = {
       card: '0px 2px 8px rgba(0, 0, 0, 0.15)',
     },
     borderRadius: {
+      ...defaultTheme.borderRadius,
       target: '10% 10% 10% 50%',
     },
   },
