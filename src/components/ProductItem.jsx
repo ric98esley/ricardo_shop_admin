@@ -20,7 +20,7 @@ const ProductItem = ({ product }) => {
   return (
     <div className="rounded-tl-3xl rounded-br-3xl shadow-card flex flex-col items-center justify-between relative w-full h-80">
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role*/}
-      <figure className="absolute top-3.5 right-3.5 m-0 w-8 h-8" onClick={() => handleClick(product)} onKeyPress={() => handleClick(product)} role={'button'}>
+      <figure className="absolute top-3.5 right-3.5 m-0 w-10 h-10" onClick={() => handleClick(product)} onKeyPress={() => handleClick(product)} role={'button'}>
         <div>
           <Image src={handleCheck() ? addedToCard : addToCard} alt="" className="z-10"/>
         </div>
