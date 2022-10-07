@@ -11,22 +11,25 @@ import endPoints from '@services/api';
 import Bar from '@icons/icon_menu.svg';
 import Cart from '@icons/icon_shopping_cart.svg';
 import Logo from '@logos/logo_yard_sale.svg';
+import MobileMenu from '@components/MobileMenu';
 
 const Header = () => {
   const products = useFetch(endPoints.products.getProducts);
   const categoryNames = new Set(products?.map((product) => product.category.name));
-  const categories = Array.from(categoryNames);
+  const categoriesArray = Array.from(categoryNames);
+  const categories = categoriesArray.sort();
   const { state, toggleOrders, toggleMenu, toggleMenuMobile, changeToggle } = useContext(ShoppingCartContext);
   const handleToggle = (toggle) => {
     changeToggle(toggle);
   };
 
+  console.log(categories);
+
   return (
     <>
       <nav className="flex justify-between py-0 px-6 border-b border-veryLightPink border-solid sticky top-0 z-20 bg-white">
         <div className="block lg:hidden my-auto mx-0">
-  
-            <Image onClick={() => handleToggle('menu-mobile')} src={Bar} alt="menu" />
+          <Image onClick={() => handleToggle('menu-mobile')} src={Bar} alt="menu" />
         </div>
 
         <div className="flex">
@@ -35,16 +38,13 @@ const Header = () => {
           </Link>
 
           <ul className="hidden list-none p-0 ml-12 lg:flex lg:items-center h-16">
-            {categories.map((category) => {
-              console.log(category);
-              return (
-                <li>
-                  <a className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen" href="/">
-                    {category}
-                  </a>
-                </li>
-              );
-            })}
+            {categories.map((category) => (
+              <li>
+                <a className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen" href="/">
+                  {category}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -67,6 +67,7 @@ const Header = () => {
             </li>
           </ul>
         </div>
+        {toggleMenuMobile && <MobileMenu categories={categories} />}
         {toggleOrders && <MyOrders />}
       </nav>
     </>
