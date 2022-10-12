@@ -27,11 +27,9 @@ const Header = () => {
     imageUrl: auth?.user?.avatar,
   };
 
-  const { state } = useContext(ShoppingCartContext);
-  const { setCategoryHeader } = useContext(ShoppingCartContext);
+  const { state, setCategoryHeader } = useContext(ShoppingCartContext);
 
-
-  const categoriesFetch = useFetch(endPoints.categories.getCategories);
+  const categoriesFetch = useFetch(endPoints.categories.getCategories());
   const categories = [
     {
       id: 0,
@@ -41,16 +39,9 @@ const Header = () => {
     ...categoriesFetch,
   ];
 
-  useEffect(
-    () => {
-      setCategoryHeader({
-        id: 0,
-        name: 'All',
-        image: 'https://api.lorem.space/image/fashion?w=640&h=480&r=9765',
-      });
-    },
-    [categories.length]
-  );
+  const handleCategory = (categoryH) => {
+      setCategoryHeader(categoryH);
+    }
 
   const [toggleOrders, setToggleOrders] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -92,7 +83,7 @@ const Header = () => {
           <ul className="hidden list-none p-0 ml-12 lg:flex lg:items-center h-16">
             {categories.map((category) => (
               <li key={`nav-list-category-${category.name}`}>
-                <button className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen" href="/">
+                <button onClick={() => handleCategory(category) } className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen">
                   {category.name}
                 </button>
               </li>
@@ -133,7 +124,7 @@ const Header = () => {
           </ul>
         </div>
         {toggleMenu && <Menu changeToggle={changeToggle} logout={auth.logout} />}
-        {toggleMenuMobile && <MobileMenu categories={categories} user={userData} />}
+        {toggleMenuMobile && <MobileMenu categories={categories} user={userData} handleCategory={handleCategory} />}
         {toggleOrders && <MyOrders />}
       </nav>
       <Modal open={open} setOpen={setOpen}>

@@ -6,7 +6,10 @@ const initialState = {
 
 const useInitialState = () => {
   const [state, setState] = useState(initialState);
-  const [categoryHeader, setCategoryHeader] = useState({});
+  const [categoryHeader, setCategoryHeader] = useState({"id": 0,
+  "name": "All",
+  "image": "https://api.lorem.space/image/watch?w=640&h=480&r=2848"
+});
 
 
 

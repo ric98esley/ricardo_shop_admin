@@ -8,7 +8,7 @@ const endPoints = {
     profile: `${API}/api/${VERSION}/auth/profile`,
   },
   categories: {
-    getCategories: `${API}/api/${VERSION}/categories`,
+    getCategories: (offset = 5) => `${API}/api/${VERSION}/categories?limit=${offset}`,
     postCategories: `${API}/api/${VERSION}/categories`,
     getCategoriesProduct: (id) => `${API}/api/${VERSION}/categories/${id}/products`,
     putCategories: (id) => `${API}/api/${VERSION}/categories/${id}`,

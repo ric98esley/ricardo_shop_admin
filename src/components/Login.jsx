@@ -1,16 +1,22 @@
 import React, { useRef, useState } from 'react';
-import { LockClosedIcon } from '@heroicons/react/24/solid';
-import { useAuth } from '@hooks/useAuth';
 import Router from 'next/router';
+import Image from 'next/image';
+import { useForm } from 'react-hook-form';
+
+import { useAuth } from '@hooks/useAuth';
+
+import { LockClosedIcon } from '@heroicons/react/24/solid';
+import Logo from '@logos/logo_yard_sale.svg';
 
 const Login = ({setOpen}) => {
+  const { register, handleSubmit } = useForm();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const auth = useAuth();
   const [errorLogin, setErrorLogin] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const submitHanlder = (event) => {
+  const submitHanlder = (form,event) => {
     event.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
@@ -21,7 +27,6 @@ const Login = ({setOpen}) => {
       .signIn(email, password)
       .then(() => {
         setOpen(false);
-        Router.push('/dashboard');
       })
       .catch(function (error) {
         if (error.response?.status === 401) {
@@ -38,17 +43,17 @@ const Login = ({setOpen}) => {
 
 
   return (
-    <div className="w-full h-auto grid place-items-center">
-      <div className="grid grid-rows-[auto_1fr_auto] w-72">
-        <img src="./logos/logo_yard_sale.svg" alt="logo" className="w-72 mb-12 justify-self-center lg:hidden" />
+    <div className="w-full h-96 grid place-items-center">
+      <div className="grid grid-rows-[auto_1fr_auto] min-w-[240px] max-w-72">
+        <Image src={Logo} alt="logo" className="w-72 mb-12 justify-self-center lg:hidden" />
 
-        <form onSubmit={submitHanlder} className="flex flex-col ">
+        <form onSubmit={handleSubmit(submitHanlder)} className="flex flex-col ">
           <label htmlFor="email-address" className="text-sm font-bold mb-1">
             Email address
           </label>
           <input
             id="email-address"
-            name="email"
+            {...register('email')}
             type="email"
             autoComplete="email"
             required
@@ -62,7 +67,7 @@ const Login = ({setOpen}) => {
           </label>
           <input
             id="password"
-            name="password"
+            {...register('password')}
             autoComplete="current-password"
             required
             ref={passwordRef}
@@ -73,8 +78,8 @@ const Login = ({setOpen}) => {
 
           <button
           disabled={loading}
-          type="submit" 
-          value="Log in" 
+          type="submit"
+          value="Log in"
           className="bg-hospitalGreen rounded-lg text-white cursor-pointer font-bold h-12 mt-4 mb-7 relative">
             <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-white" aria-hidden="true" />

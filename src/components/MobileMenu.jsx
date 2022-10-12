@@ -1,13 +1,13 @@
 import React from 'react';
 
-const MobileMenu = ({categories, user}) => {
+const MobileMenu = ({categories, user, handleCategory}) => {
   return (
     <>
       <div className="p-6 absolute top-[65px] left-0 w-full bg-white font-bold [&>ul>li]:mb-4 overflow-y-scroll">
         <ul className="p-0 mt-6 text-black border-b border-veryLightPink ">
           {categories.map((category) => 
             (<li key={`nav-list-category-mobile-${category.name}`} className="mb-4">
-              <a href="/">{category.name}</a>
+              <button onClick={() =>{handleCategory(category)}}>{category.name}</button>
             </li>)
           )}
         </ul>

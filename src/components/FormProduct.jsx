@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-
 import { yupResolver } from '@hookform/resolvers/yup';
 import { productSchema } from '@schema/product';
 import { addProduct, editProduct } from '@services/api/products';
@@ -35,8 +34,8 @@ export default function FormProduct({ setOpen, setAlert, product }) {
     };
     if (product) {
       editProduct(product.id, data).then((response) => {
-        router.push('/dashboard/products/')
-      })
+        router.push('/dashboard/products/');
+      });
     } else {
       addProduct(data)
         .then((response) => {
@@ -120,7 +119,7 @@ export default function FormProduct({ setOpen, setAlert, product }) {
                 id="description"
                 autoComplete="description"
                 rows="3"
-                className="form-textarea mt-1 block w-full mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                className="form-textarea mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
               />
               <p>{errors.description?.message}</p>
             </div>
