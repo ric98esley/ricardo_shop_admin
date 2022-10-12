@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import ShoppingCartContext from '@context/ShoppingCartContext';
 
 import MyOrders from '@containers/MyOrders';
+import Modal from '@common/Modal';
 import useFetch from '@hooks/useFetch';
 import endPoints from '@services/api';
 
@@ -12,18 +13,67 @@ import Bar from '@icons/icon_menu.svg';
 import Cart from '@icons/icon_shopping_cart.svg';
 import Logo from '@logos/logo_yard_sale.svg';
 import MobileMenu from '@components/MobileMenu';
+import Menu from '@components/Menu';
+import Login from '@components/Login';
+import { useAuth } from '@hooks/useAuth';
 
 const Header = () => {
-  const products = useFetch(endPoints.products.getProducts);
-  const categoryNames = new Set(products?.map((product) => product.category.name));
-  const categoriesArray = Array.from(categoryNames);
-  const categories = categoriesArray.sort();
-  const { state, toggleOrders, toggleMenu, toggleMenuMobile, changeToggle } = useContext(ShoppingCartContext);
+  const [open, setOpen] = useState(false);
+
+  const auth = useAuth();
+  const userData = {
+    name: auth?.user?.name,
+    email: auth?.user?.email,
+    imageUrl: auth?.user?.avatar,
+  };
+
+  const { state } = useContext(ShoppingCartContext);
+  const { setCategoryHeader } = useContext(ShoppingCartContext);
+
+
+  const categoriesFetch = useFetch(endPoints.categories.getCategories);
+  const categories = [
+    {
+      id: 0,
+      name: 'All',
+      image: 'https://api.lorem.space/image/fashion?w=640&h=480&r=9765',
+    },
+    ...categoriesFetch,
+  ];
+
+  useEffect(
+    () => {
+      setCategoryHeader({
+        id: 0,
+        name: 'All',
+        image: 'https://api.lorem.space/image/fashion?w=640&h=480&r=9765',
+      });
+    },
+    [categories.length]
+  );
+
+  const [toggleOrders, setToggleOrders] = useState(false);
+  const [toggleMenu, setToggleMenu] = useState(false);
+  const [toggleMenuMobile, setToggleMenuMobile] = useState(false);
+  const changeToggle = (toggle) => {
+    if (toggle === 'menu') {
+      setToggleMenu(!toggleMenu);
+      setToggleMenuMobile(false);
+      setToggleOrders(false);
+    } else if (toggle === 'cart') {
+      setToggleOrders(!toggleOrders);
+      setToggleMenuMobile(false);
+      setToggleMenu(false);
+    } else if (toggle === 'menu-mobile') {
+      setToggleMenuMobile(!toggleMenuMobile);
+      setToggleOrders(false);
+      setToggleMenu(false);
+    }
+  };
+
   const handleToggle = (toggle) => {
     changeToggle(toggle);
   };
-
-  console.log(categories);
 
   return (
     <>
@@ -34,15 +84,17 @@ const Header = () => {
 
         <div className="flex">
           <Link href="/">
-            <Image src={Logo} alt="logo" className="w-[100px] cursor-pointer" />
+            <a className="flex align-middle">
+              <Image src={Logo} alt="logo" className="w-[100px] cursor-pointer" />
+            </a>
           </Link>
 
           <ul className="hidden list-none p-0 ml-12 lg:flex lg:items-center h-16">
             {categories.map((category) => (
-              <li>
-                <a className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen" href="/">
-                  {category}
-                </a>
+              <li key={`nav-list-category-${category.name}`}>
+                <button className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen" href="/">
+                  {category.name}
+                </button>
               </li>
             ))}
           </ul>
@@ -50,14 +102,27 @@ const Header = () => {
 
         <div>
           <ul className="list-none p-0 m-0 flex items-center h-16 space-x-4">
-            <li className="hidden lg:inline-block">
-              <button className="inline-block h-10 w-24 border border-solid border-hospitalGreen text-md font-semibold text-veryLightPink rounded-lg hover:scale-110">Login</button>
-            </li>
-            <li className="hidden lg:inline-block">
-              <button className="inline-block h-10 w-24 border border-solid bg-hospitalGreen text-md font-semibold text-white rounded-lg hover:scale-110">Sign up</button>
-            </li>
-            <li className="hidden text-veryLightPink text-sm mr-3">platzi@example.com</li>
-            <li className="relative cursor-pointer align-middle">
+            {!auth.user && (
+              <>
+                <li className="hidden lg:inline-block">
+                  <button
+                    className="inline-block h-10 w-24 border border-solid border-hospitalGreen text-md font-semibold text-veryLightPink rounded-lg hover:scale-110"
+                    onClick={() => setOpen(!open)}
+                  >
+                    Login
+                  </button>
+                </li>
+                <li className="hidden lg:inline-block">
+                  <button className="inline-block h-10 w-24 border border-solid bg-hospitalGreen text-md font-semibold text-white rounded-lg hover:scale-110">Sign up</button>
+                </li>
+              </>
+            )}
+            {auth.user && (
+              <li role="menuitem" className="hidden cursor-pointer lg:inline-block text-veryLightPink text-sm mr-3" onClick={() => handleToggle('menu')} onKeyPress={() => handleToggle('menu')}>
+                {userData.email}
+              </li>
+            )}
+            <li role="menuitem" className="relative cursor-pointer align-middle">
               <Image src={Cart} alt="shopping cart" className="" onClick={() => handleToggle('cart')} />
               {state.cart.length > 0 ? (
                 <div className="w-4 h-4 font-bold absolute top-[-6px] right-[-3px] text-sm flex justify-center items-center bg-hospitalGreen rounded-full">
@@ -67,9 +132,13 @@ const Header = () => {
             </li>
           </ul>
         </div>
-        {toggleMenuMobile && <MobileMenu categories={categories} />}
+        {toggleMenu && <Menu changeToggle={changeToggle} logout={auth.logout} />}
+        {toggleMenuMobile && <MobileMenu categories={categories} user={userData} />}
         {toggleOrders && <MyOrders />}
       </nav>
+      <Modal open={open} setOpen={setOpen}>
+        <Login setOpen={setOpen} />
+      </Modal>
     </>
   );
 };

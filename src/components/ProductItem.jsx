@@ -26,7 +26,7 @@ const ProductItem = ({ product }) => {
         </div>
       </figure>
       <div className="w-60 h-60 rounded-tl-3xl rounded-br-3xl object-cover overflow-hidden z-0">
-        <Image objectFit='cover' loader={() => product.images[0]} unoptimized={true} layout="responsive" src={product.images[0]} alt={product.title} width={'100%'} height={'100%'} />
+        <Image objectFit='cover' loader={() => product.images[0]} unoptimized={true} layout="responsive" src={product.images[0]} alt={product.title} width={'100%'} height={'100%'}/>
       </div>
       <div className="h-20 w-full flex items-center">
           <div className="w-3/5 text-ellipsis h-10 overflow-hidden">

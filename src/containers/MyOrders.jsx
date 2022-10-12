@@ -15,7 +15,7 @@ const MyOrders = () => {
     return sum;
   };
   return (
-    <aside className="w-[360px] p-6 absolute right-0 bg-white top-16 bottom-auto rounded-lg">
+    <aside className="w-[360px] p-6 absolute right-0 bg-white top-[65px] bottom-auto rounded-lg">
       <div className="flex">
         <div className="w-5 h-5 rotate-180 my-auto mr-4 ml-0 cursor-pointer flex items-center">
           <Image src={arrow} alt="arrow" onClick={() => changeToggle('cart')} />

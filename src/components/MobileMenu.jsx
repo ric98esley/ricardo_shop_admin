@@ -1,13 +1,13 @@
 import React from 'react';
 
-const MobileMenu = ({categories}) => {
+const MobileMenu = ({categories, user}) => {
   return (
     <>
-      <div className="p-6 absolute top-16 left-0 w-full bg-white font-bold [&>ul>li]:mb-4">
+      <div className="p-6 absolute top-[65px] left-0 w-full bg-white font-bold [&>ul>li]:mb-4 overflow-y-scroll">
         <ul className="p-0 mt-6 text-black border-b border-veryLightPink ">
           {categories.map((category) => 
-            (<li className="mb-4">
-              <a href="/">{category}</a>
+            (<li key={`nav-list-category-mobile-${category.name}`} className="mb-4">
+              <a href="/">{category.name}</a>
             </li>)
           )}
         </ul>
@@ -24,7 +24,7 @@ const MobileMenu = ({categories}) => {
         <ul className="p-0 mt-6 text-black">
           <li>
             <a href="/" className="font-light text-sm">
-              platzi@example.com
+              {user.email}
             </a>
           </li>
           <li>
