@@ -4,12 +4,12 @@ const useCategoryHeader = () => {
   const [categoryHeader, setCategoryHeader] = useState({});
 
   const changeCategory = (category) => {
-    setCategoryHeader({...categoryHeader, category});
-    }
+    setCategoryHeader({ ...categoryHeader, category });
+  };
 
   return {
     categoryHeader,
-    changeCategory
+    changeCategory,
   };
 };
 

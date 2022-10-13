@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const initialState = {
   cart: [],
@@ -6,12 +6,7 @@ const initialState = {
 
 const useInitialState = () => {
   const [state, setState] = useState(initialState);
-  const [categoryHeader, setCategoryHeader] = useState({"id": 0,
-  "name": "All",
-  "image": "https://api.lorem.space/image/watch?w=640&h=480&r=2848"
-});
-
-
+  const [categoryHeader, setCategoryHeader] = useState({ id: 0, name: 'All', image: 'https://api.lorem.space/image/watch?w=640&h=480&r=2848' });
 
   const addToCart = (product) => {
     setState({
@@ -32,7 +27,7 @@ const useInitialState = () => {
     addToCart,
     removeFromCart,
     categoryHeader,
-    setCategoryHeader
+    setCategoryHeader,
   };
 };
 

@@ -12,15 +12,16 @@ import endPoints from '@services/api';
 import { deleteProduct } from '@services/api/products';
 
 import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
+import Image from 'next/image';
 const PRODUCT_LIMIT = 5;
 const PRODUCT_OFFSET = 0;
 
-const products = () => {
-  const totalProducts = useFetch(endPoints.products.getProducts).length;
+const Products = () => {
   const [offset, setOffSet] = useState(PRODUCT_OFFSET);
-
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState([]);
+
+  const totalProducts = useFetch(endPoints.products.getProducts).length;
   const { alert, setAlert, toggleAlert } = useAlert();
 
   useEffect(() => {
@@ -118,8 +119,8 @@ const products = () => {
                     <tr key={`Product-Item-${product.id}`}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10">
-                            <img className="h-10 w-10 rounded-full" src={product.images[0]} alt="" />
+                          <div className="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden">
+                            <Image objectFit="cover" src={product.images[0]} width={40} height={40} loader={() => product.images[0]} alt={`${product.name}`} />
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{product.title}</div>
@@ -134,10 +135,8 @@ const products = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div  className="text-indigo-600 hover:text-indigo-900">
-                          <Link href={`edit/${product.id}`} >
-                          Edit
-                          </Link>
+                        <div className="text-indigo-600 hover:text-indigo-900">
+                          <Link href={`edit/${product.id}`}>Edit</Link>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -159,4 +158,4 @@ const products = () => {
   );
 };
 
-export default products;
+export default Products;

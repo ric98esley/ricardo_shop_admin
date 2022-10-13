@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
-
+import { useState, useEffect } from 'react';
 
 const useScreenSize = () => {
   const [width, setWidth] = useState(260);
   const [height, setHeight] = useState(360);
 
-
   useEffect(() => {
-    setWidth(window.innerWidth)
-    window.addEventListener("resize", handleResize);
+    setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 

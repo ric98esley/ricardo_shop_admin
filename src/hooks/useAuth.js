@@ -62,7 +62,9 @@ function useProviderAuth() {
     delete axios.defaults.headers.Authorization;
   };
 
-  useEffect(() => {fetchUser()}, [fetchUser]);
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return {
     user,

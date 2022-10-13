@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -40,8 +40,8 @@ const Header = () => {
   ];
 
   const handleCategory = (categoryH) => {
-      setCategoryHeader(categoryH);
-    }
+    setCategoryHeader(categoryH);
+  };
 
   const [toggleOrders, setToggleOrders] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -75,7 +75,7 @@ const Header = () => {
 
         <div className="flex">
           <Link href="/">
-            <a className="flex align-middle">
+            <a href="replace" className="flex align-middle">
               <Image src={Logo} alt="logo" className="w-[100px] cursor-pointer" />
             </a>
           </Link>
@@ -83,7 +83,7 @@ const Header = () => {
           <ul className="hidden list-none p-0 ml-12 lg:flex lg:items-center h-16">
             {categories.map((category) => (
               <li key={`nav-list-category-${category.name}`}>
-                <button onClick={() => handleCategory(category) } className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen">
+                <button onClick={() => handleCategory(category)} className="text-veryLightPink border border-solid border-white p-2 rounded-lg hover:border-hospitalGreen">
                   {category.name}
                 </button>
               </li>

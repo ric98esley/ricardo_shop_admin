@@ -6,23 +6,21 @@ import FormProduct from '@components/FormProduct';
 import endPoints from '@services/api';
 
 const Edit = () => {
-  const [product, setProduct] = useState({})
+  const [product, setProduct] = useState({});
   const router = useRouter();
 
   useEffect(() => {
     const { id } = router.query;
-    if(!router.isReady) return;
+    if (!router.isReady) return;
     async function getProducts() {
       const response = await axios.get(endPoints.products.getProduct(id));
-      setProduct(response.data)
+      setProduct(response.data);
     }
-    
+
     getProducts();
+  }, [router.isReady, router.query]);
 
-  }, [router?.isReady]);
-
-
-  return <FormProduct product={product}/>;
+  return <FormProduct product={product} />;
 };
 
 export default Edit;

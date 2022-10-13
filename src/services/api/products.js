@@ -9,13 +9,13 @@ const addProduct = async (body) => {
     },
   };
   const response = await axios.post(endPoints.products.addProducts, body, config);
-	return response.data;
+  return response.data;
 };
 
 const deleteProduct = async (id) => {
   const response = await axios.delete(endPoints.products.deleteProduct(id));
   return response;
-}
+};
 const editProduct = async (id, body) => {
   const config = {
     headers: {
@@ -24,8 +24,7 @@ const editProduct = async (id, body) => {
     },
   };
   const response = await axios.put(endPoints.products.putProduct(id), body, config);
-	return response.data;
+  return response.data;
 };
 
-
-export {addProduct , deleteProduct, editProduct};
+export { addProduct, deleteProduct, editProduct };

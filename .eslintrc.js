@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   env: {
     browser: true,
     es2021: true,
@@ -14,7 +15,8 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    "react/prop-types": "off"
-    semi: ['error', 'always'],
+    'react/prop-types': 'off',
+    'semi': ['error', 'always'],
+    'prettier/prettier': 0,
   },
 };

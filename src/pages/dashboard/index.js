@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useFetch from '@hooks/useFetch';
 import endPoints from '@services/api';
 import Chart from '@common/Chart';
 
 export default function Dashboard() {
-
-  const totalProducts = useFetch(endPoints.products.getProducts).length;
   const products = useFetch(endPoints.products.getProducts);
 
   const categoryNames = products?.map((product) => product.category);
   const categoryCount = categoryNames?.map((category) => category.name);
 
-  const countOcurrences = (arr) => arr.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev),{});
+  const countOcurrences = (arr) => arr.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), {});
 
   const data = {
     datasets: [

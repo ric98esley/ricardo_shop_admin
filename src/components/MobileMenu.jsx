@@ -1,36 +1,43 @@
 import React from 'react';
+import Link from 'next/link';
 
-const MobileMenu = ({categories, user, handleCategory}) => {
+const MobileMenu = ({ categories, user, handleCategory }) => {
   return (
     <>
       <div className="p-6 absolute top-[65px] left-0 w-full bg-white font-bold [&>ul>li]:mb-4 overflow-y-scroll">
         <ul className="p-0 mt-6 text-black border-b border-veryLightPink ">
-          {categories.map((category) => 
-            (<li key={`nav-list-category-mobile-${category.name}`} className="mb-4">
-              <button onClick={() =>{handleCategory(category)}}>{category.name}</button>
-            </li>)
-          )}
+          {categories.map((category) => (
+            <li key={`nav-list-category-mobile-${category.name}`} className="mb-4">
+              <button
+                onClick={() => {
+                  handleCategory(category);
+                }}
+              >
+                {category.name}
+              </button>
+            </li>
+          ))}
         </ul>
 
         <ul className="p-0 mt-6 text-black">
           <li>
-            <a href="/">My orders</a>
+            <Link href="/">My orders</Link>
           </li>
           <li>
-            <a href="/">My account</a>
+            <Link href="/">My account</Link>
           </li>
         </ul>
 
         <ul className="p-0 mt-6 text-black">
           <li>
-            <a href="/" className="font-light text-sm">
+            <Link href="/" className="font-light text-sm">
               {user.email}
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/" className="text-sm text-hospitalGreen">
+            <Link href="/" className="text-sm text-hospitalGreen">
               Sign out
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

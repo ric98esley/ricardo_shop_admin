@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import Router from 'next/router';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 
@@ -7,8 +6,9 @@ import { useAuth } from '@hooks/useAuth';
 
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 import Logo from '@logos/logo_yard_sale.svg';
+import Link from 'next/link';
 
-const Login = ({setOpen}) => {
+const Login = ({ setOpen }) => {
   const { register, handleSubmit } = useForm();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -16,7 +16,7 @@ const Login = ({setOpen}) => {
   const [errorLogin, setErrorLogin] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const submitHanlder = (form,event) => {
+  const submitHanlder = (form, event) => {
     event.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
@@ -37,10 +37,9 @@ const Login = ({setOpen}) => {
           setErrorLogin('Algo salió mal.');
         }
         setLoading(false);
+        console.log(errorLogin);
       });
   };
-
-
 
   return (
     <div className="w-full h-96 grid place-items-center">
@@ -76,25 +75,21 @@ const Login = ({setOpen}) => {
             className="bg-textInputField rounded-lg h-8 text-base p-1.5 mb-3 input-password border-none"
           />
 
-          <button
-          disabled={loading}
-          type="submit"
-          value="Log in"
-          className="bg-hospitalGreen rounded-lg text-white cursor-pointer font-bold h-12 mt-4 mb-7 relative">
+          <button disabled={loading} type="submit" value="Log in" className="bg-hospitalGreen rounded-lg text-white cursor-pointer font-bold h-12 mt-4 mb-7 relative">
             <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <LockClosedIcon className="h-5 w-5 text-white" aria-hidden="true" />
-                </span>
-                Sign in
-                {loading && (
-                  <span className="flex absolute h-4 w-4 top-0 right-0 -mt-1 -mr-1">
-                    <span className="animate-ping absolte inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-300"></span>
-                  </span>
-                )}
+              <LockClosedIcon className="h-5 w-5 text-white" aria-hidden="true" />
+            </span>
+            Sign in
+            {loading && (
+              <span className="flex absolute h-4 w-4 top-0 right-0 -mt-1 -mr-1">
+                <span className="animate-ping absolte inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-300"></span>
+              </span>
+            )}
           </button>
-          <a href="/" className="text-hospitalGreen text-sm text-center mb-8">
-            Forgot my password
-          </a>
+          <Link href="/">
+            <p className="text-hospitalGreen text-sm text-center mb-8">Forgot my password</p>
+          </Link>
         </form>
 
         <button className="bg-white rounded-lg text-hospitalGreen border border-hospitalGreen-1 cursor-pointer font-bold h-12 signup-button">Sign up</button>

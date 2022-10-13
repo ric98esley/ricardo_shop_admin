@@ -103,12 +103,8 @@ const Pagination = ({ setOffSet, productLimit, totalProducts }) => {
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
-        <a href="#" className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-          Previous
-        </a>
-        <a href="#" className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-          Next
-        </a>
+        <button className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</button>
+        <button className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</button>
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
@@ -124,7 +120,7 @@ const Pagination = ({ setOffSet, productLimit, totalProducts }) => {
             {itemsPagination.map((page, index) => {
               if (page == LEFT_PAGE)
                 return (
-                  <a
+                  <button
                     key={`Pagination-${index}-${page}`}
                     onClick={() => {
                       buttonChange(current - 1);
@@ -134,11 +130,11 @@ const Pagination = ({ setOffSet, productLimit, totalProducts }) => {
                   >
                     <span className="sr-only">Previous</span>
                     <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                  </a>
+                  </button>
                 );
               if (page == RIGHT_PAGE)
                 return (
-                  <a
+                  <button
                     key={`Pagination-${index}-${page}`}
                     onClick={() => {
                       buttonChange(current + 1);
@@ -148,10 +144,10 @@ const Pagination = ({ setOffSet, productLimit, totalProducts }) => {
                   >
                     <span className="sr-only">Next</span>
                     <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                  </a>
+                  </button>
                 );
               return (
-                <a
+                <button
                   onClick={() => {
                     buttonChange(page);
                   }}
@@ -163,7 +159,7 @@ const Pagination = ({ setOffSet, productLimit, totalProducts }) => {
                   } px-4 py-2 text-sm font-medium focus:z-20`}
                 >
                   {page}
-                </a>
+                </button>
               );
             })}
           </nav>
