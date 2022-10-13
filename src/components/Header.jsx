@@ -124,7 +124,7 @@ const Header = () => {
           </ul>
         </div>
         {toggleMenu && <Menu changeToggle={changeToggle} logout={auth.logout} />}
-        {toggleMenuMobile && <MobileMenu categories={categories} user={userData} handleCategory={handleCategory} />}
+        {toggleMenuMobile && <MobileMenu handleToggle={handleToggle} categories={categories} user={userData} handleCategory={handleCategory} />}
         {toggleOrders && <MyOrders />}
       </nav>
       <Modal open={open} setOpen={setOpen}>
