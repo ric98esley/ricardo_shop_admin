@@ -25,7 +25,6 @@ function useProviderAuth() {
         axios.defaults.headers.Authorization = `Bearer ${token}`;
         const { data: user } = await axios.get(endPoints.auth.profile);
         setUser(user);
-        console.log(user);
       }
     } catch (error) {
       logout();

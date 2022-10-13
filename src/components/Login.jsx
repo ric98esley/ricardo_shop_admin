@@ -1,5 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Router from 'next/router';
+
 import { useForm } from 'react-hook-form';
 
 import { useAuth } from '@hooks/useAuth';
@@ -15,6 +17,11 @@ const Login = ({ setOpen }) => {
   const auth = useAuth();
   const [errorLogin, setErrorLogin] = useState(null);
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (auth.user?.role == 'admin') {
+      Router.push('/dashboard');
+    }
+  }, [auth.user, setOpen]);
 
   const submitHanlder = (form, event) => {
     event.preventDefault();
